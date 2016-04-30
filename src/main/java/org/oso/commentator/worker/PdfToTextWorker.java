@@ -7,10 +7,12 @@ import java.util.concurrent.Executor;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.oso.commentator.config.Config;
 
 public class PdfToTextWorker extends BaseWorker {
 
   private FileWriter fileWriter;
+  private Config config = Config.getInstance();
   
   public PdfToTextWorker(Executor executor, String documentId, FileWriter fileWriter) {
     super(executor, documentId);
@@ -20,7 +22,12 @@ public class PdfToTextWorker extends BaseWorker {
   @Override
   public void doAction() {
     try {
-      String name = "c:\\users\\juan\\dev\\temp\\" + getDocumentId() + ".pdf";
+      String name = new StringBuilder()
+          .append(System.getProperty("user.home"))
+          .append(config.getExportCommentsPath())
+          .append(getDocumentId())
+          .append(".pdf")
+          .toString();
       PDDocument doc = PDDocument.load(new File(name));
       PDFTextStripper stripper = new PDFTextStripper();
       StringBuilder sb = new StringBuilder("-----------------" + getDocumentId() + "-----------------\r\n");

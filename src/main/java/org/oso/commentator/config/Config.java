@@ -1,6 +1,5 @@
 package org.oso.commentator.config;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -9,6 +8,7 @@ public class Config {
 
   private static Config config;
   private Properties prop;
+  private static final String CONFIG_FILE_NAME = "/config.properties";
 
   public static Config getInstance() {
     if (config == null) {
@@ -22,17 +22,9 @@ public class Config {
     InputStream input = null;
 
     try {
-      System.out.println(System.getProperty("user.dir"));;
-      input = new FileInputStream("config.properties");
-
+      input = Config.class.getResourceAsStream(CONFIG_FILE_NAME);
       // load a properties file
       prop.load(input);
-
-      // get the property value and print it out
-      System.out.println(prop.getProperty("database"));
-      System.out.println(prop.getProperty("dbuser"));
-      System.out.println(prop.getProperty("dbpassword"));
-
     } catch (IOException ex) {
       ex.printStackTrace();
     } finally {
@@ -56,6 +48,14 @@ public class Config {
   
   public String getExportFileName() {
     return getProperty("export.filename");
+  }
+  
+  public String getExportCommentsPath() {
+    return getProperty("export.comments.path");
+  }
+  
+  public String getExportCommentsMergedTxt() {
+    return getProperty("export.comments.mergedtxt");
   }
 
 }
